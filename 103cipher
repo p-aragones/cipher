@@ -1,0 +1,140 @@
+#!/usr/bin/python3
+
+##
+## EPITECH PROJECT, 2020
+## 103cipher
+## File description:
+## cipher a text
+##
+
+import sys
+import math
+
+ac  = len(sys.argv)
+
+def print_help():
+    print("USAGE")
+    print("\t./103cipher message key flag\n")
+    print("DESCRIPTION")
+    print("\tmessage\t\ta message, made of ASCII characters")
+    print("\tkey\t\tthe encryption key, made of ASCII characters")
+    print("\tflag\t\t0 for the message to be encrypted, 1 to be decrypted")
+
+def key_to_matrix(array, matrix):
+    global rows
+    rows = 0
+    l = len(sys.argv[2])
+    l2 = len(sys.argv[2])
+    s = 1
+    x = 0
+    y = 0
+    oor = 0
+    print("Key matrix:")
+    if ((math.sqrt(l)).is_integer() == True):
+        matrix = [ [ 0 for i in range(int(math.sqrt(l))) ] for j in range(int(math.sqrt(l))) ]
+        for i in range(0, l, 1):
+            array.append(sys.argv[2][i])
+            matrix[x][y] = ord(sys.argv[2][i])
+            print(ord(sys.argv[2][i]), sep= '', end= '')
+            y += 1
+            if (s == math.sqrt(l)):
+                print()
+                s = 0
+                rows += 1
+                y = 0
+                x += 1
+            elif (i != l - 1):
+                print("\t", sep='', end= '')
+            s += 1
+        return (matrix)
+
+    else:
+        while ((math.sqrt(l)).is_integer() == False):
+            l += 1
+        matrix = [ [ 0 for i in range(int(math.sqrt(l))) ] for j in range(int(math.sqrt(l))) ]
+        for i in range(0, l, 1):
+            if (i >= l2):
+                oor = 0
+                print(oor, sep= '', end= '')
+                matrix[x][y] = 0
+                y += 1
+            else:
+                oor = sys.argv[2][i]
+                print(ord(oor), sep= '', end= '')
+                matrix[x][y] = ord(sys.argv[2][i])
+                y += 1
+            array.append(oor)
+            if (s == math.sqrt(l)):
+                print()
+                s = 0
+                rows += 1
+                y = 0
+                x += 1
+            elif (i != l - 1):
+                print("\t", sep='', end= '')
+            s += 1
+        return (matrix)
+
+def msg_to_matrix(msg):
+    global rows
+    global length
+    length = len(sys.argv[1])/rows
+    x = 0
+    y = 0
+    s = 1
+    while ((float(length)).is_integer() == False):
+        length = int(length) + 1
+    msg = [ [ 0 for i in range(int(rows)) ] for j in range(int(length)) ]
+    for i in range(0, int(rows * length), 1):
+        if (i >= len(sys.argv[1])):
+            msg[x][y] = 0
+            y += 1
+        else:
+            msg[x][y] = ord(sys.argv[1][i])
+            y += 1
+        if (s == rows):
+            s = 0
+            y = 0
+            x += 1
+        s += 1
+    return (msg)
+
+def encrypt_msg(msg, matrix):
+    global rows
+    global length
+    space = 0
+    total = 0
+    i_rows = 0
+    i_columns = 0
+    for i in range(int(length)):
+        for j in range(int(rows)):
+            for k in range(int(rows)):
+                total += msg[i][k] * matrix[k][j]
+            if space == 0:
+                print(total, sep=' ', end='')
+                space = 1
+            else:
+                print(" ", total, sep=' ', end='')
+            total = 0
+            
+def main():
+        array = []
+        matrix = []
+        msg = []
+        if (ac < 2):
+            exit (84)
+        elif (ac == 2 and sys.argv[1] == "-h"):
+            print_help()
+            exit (0)
+        elif (ac < 4):
+            exit (84)
+        if (sys.argv[3] != '0'):
+            exit (84)
+        matrix = key_to_matrix(array, matrix)
+        print("\nEncrypted message:")
+        msg = msg_to_matrix(msg)
+        encrypt_msg(msg, matrix)
+        print()
+
+if __name__ == "__main__":
+    main()
